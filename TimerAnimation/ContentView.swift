@@ -8,19 +8,66 @@
 import SwiftUI
 
 struct ContentView: View {
+
+    let timer = Timer.publish(every: 1, on: .main, in: .common).autoconnect()
+    @State var advancment = 0.0
+    @State var countdown = 10
+
     var body: some View {
         VStack {
-            Image(systemName: "globe")
-                .imageScale(.large)
-                .foregroundColor(.accentColor)
-            Text("Hello, world!")
+            ZStack {
+                Circle()
+                    .frame(width: 300, height: 300)
+                    .foregroundColor(.pink.opacity(0.2))
+                Arc(endAngle: advancment)
+                .stroke(.pink, lineWidth: 150)
+                .frame(width: 150, height: 150)
+                .onReceive(timer) { _ in
+                    if advancment < 360 {
+                        withAnimation(Animation.easeInOut) {
+                            advancment += 36
+                        }
+                        countdown -= 1
+                    }
+                }
+                Text(String(countdown))
+                    .foregroundColor(.white)
+                    .font(.system(size: 150))
+            }
+            Spacer()
+                .frame(height: 140)
+            Button("Reset", action: {
+                advancment = 0
+                countdown = 10
+            })
         }
-        .padding()
     }
 }
 
 struct ContentView_Previews: PreviewProvider {
     static var previews: some View {
         ContentView()
+    }
+}
+
+struct Arc: Shape {
+    var startAngle: Angle = .degrees(0)
+    var endAngle: Double
+    var clockwise: Bool = true
+
+    var animatableData: Double {
+        get { endAngle }
+        set { endAngle = newValue }
+    }
+
+    func path(in rect: CGRect) -> Path {
+        let rotationAdjustment = Angle.degrees(90)
+        let modifiedStart = startAngle - rotationAdjustment
+        let modifiedEnd = .degrees(endAngle) - rotationAdjustment
+
+        var path = Path()
+        path.addArc(center: CGPoint(x: rect.midX, y: rect.midY), radius: rect.width / 2, startAngle: modifiedStart, endAngle: modifiedEnd, clockwise: !clockwise)
+
+        return path
     }
 }
