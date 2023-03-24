@@ -12,16 +12,17 @@ struct ContentView: View {
     let timer = Timer.publish(every: 1, on: .main, in: .common).autoconnect()
     @State var advancment = 0.0
     @State var countdown = 10
+    private var size = 300.0
 
     var body: some View {
         VStack {
             ZStack {
                 Circle()
-                    .frame(width: 300, height: 300)
+                    .frame(width: size, height: size)
                     .foregroundColor(.pink.opacity(0.2))
                 Arc(endAngle: advancment)
-                .stroke(.pink, lineWidth: 150)
-                .frame(width: 150, height: 150)
+                .stroke(.pink, lineWidth: size / 2)
+                .frame(width: size / 2, height: size / 2)
                 .onReceive(timer) { _ in
                     if advancment < 360 {
                         withAnimation(Animation.easeInOut) {
