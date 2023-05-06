@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-struct ContentView: View {
+struct TimerView: View {
 
     let timer = Timer.publish(every: 1, on: .main, in: .common).autoconnect()
     @State var advancment = 0.0
@@ -42,12 +42,6 @@ struct ContentView: View {
                 countdown = 10
             })
         }
-    }
-}
-
-struct ContentView_Previews: PreviewProvider {
-    static var previews: some View {
-        ContentView()
     }
 }
 
