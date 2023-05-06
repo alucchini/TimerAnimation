@@ -9,10 +9,9 @@ import SwiftUI
 
 struct TimerView: View {
 
-    let timer = Timer.publish(every: 1, on: .main, in: .common).autoconnect()
-    @State var advancment = 0.0
-    @State var countdown = 10
-    private var size = 300.0
+    @Binding var advancment: Double
+    @Binding var countdown: Int
+    @Binding var size: Double
 
     var body: some View {
         VStack {
@@ -23,14 +22,6 @@ struct TimerView: View {
                 Arc(endAngle: advancment)
                 .stroke(.pink, lineWidth: size / 2)
                 .frame(width: size / 2, height: size / 2)
-                .onReceive(timer) { _ in
-                    if advancment < 360 {
-                        withAnimation(Animation.easeInOut) {
-                            advancment += 36
-                        }
-                        countdown -= 1
-                    }
-                }
                 Text(String(countdown))
                     .foregroundColor(.white)
                     .font(.system(size: 150))
